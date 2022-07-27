@@ -61,11 +61,35 @@ int read_kb(int fd, uint8_t data[16])
 	return ret == 2 ? 0 : -1;
 }
 
-int write_kb(int fd, uint8_t* data)
+int read_kb_reg(int fd, uint8_t reg, uint8_t* data)
 {
 	int ret;
+
 	struct i2c_msg msgs[] = {
-		{ KB_ADDR, 0, 4, data },
+		{ KB_ADDR, 0, 1, &reg },
+		{ KB_ADDR, I2C_M_RD, 1, data },
+	};
+
+	struct i2c_rdwr_ioctl_data msg = {
+		.msgs = msgs,
+		.nmsgs = sizeof(msgs) / sizeof(msgs[0])
+	};
+
+	ret = ioctl(fd, I2C_RDWR, &msg);
+	if (ret < 0) {
+		printf("WARNING: I2C_RDWR failed (%d)\n", errno);
+		return -1;
+	}
+	
+	return ret == 2 ? 0 : -1;
+}
+
+int write_kb_reg(int fd, uint8_t reg, uint8_t data)
+{
+	int ret;
+	uint8_t buf[2] = {reg, data};
+	struct i2c_msg msgs[] = {
+		{ KB_ADDR, 0, 2, buf },
 	};
 
 	struct i2c_rdwr_ioctl_data msg = {
@@ -318,8 +342,15 @@ int main(int ac, char* av[])
 
 	debug("\033[2J");
 
-//	uint8_t buf[4] = {1, 2, 3, 4};
-//	ret = write_kb(fd, buf);
+	uint8_t val;
+
+	ret = read_kb_reg(fd, REG_SYS_CONFIG, &val);
+	syscall_error(ret < 0, "read_kb_reg(PPKB_SYS_CONFIG) failed");
+        
+        val &= ~REG_SYS_CONFIG_SCAN_BLOCK;
+
+	ret = write_kb_reg(fd, REG_SYS_CONFIG, val);
+	syscall_error(ret < 0, "write_kb_reg(PPKB_SYS_CONFIG) failed");
 
 	// - we rely on POGO interrupt to get the key updates
 	// - if any key is pressed, we will in addition poll
