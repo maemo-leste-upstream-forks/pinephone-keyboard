@@ -1969,13 +1969,48 @@ void main(void)
 	// keep UART, SPI, and I2C A in reset
 	//P0_PRST |= BIT(0) | BIT(2) | BIT(3);
 
+	// setup MCU pins
+	//
+	// pogo: P90 P92 P93 (pulled-up from phone side)
+	// i2c for pmic: P85 P86 P87
+	// matrix rows: P60-P65
+	// matrix cols: P95-97 P50-57 P80
+	// PCB pads top/NC: P70-73 P76 P77 P83-P87
+	// PCB pads bottom/NC: P81 P82
+	// NC: P66 P67 P91 P94
+	// USB: P74/D+ P75/D-
+	//
+	// NC pins must be in input mode and pulled high, or in out low, therfore:
+	//
+	// PHCON0 : P5 - no pull up, output low
+	// PHCON1 : P6 - all pull up
+	// PHCON2 : bits
+	//   0: P7 0-3 - pull up
+	//   1: P7 4-7 - pull up
+	//   2: P8 0-3 - no pull up, all out low, P80 must not have pull-up
+	//   3: P8 4-7 - no pull up, pmic i2c has its own pull-up
+	//   4: P9 0-3 - no pull up, P91 out low, pullups on phone side
+	//   5: P9 4-7 - no pull up, all out low
+
 	// enable pullups only all port 6 pins and make those pins into input
 	PAGESW = 0;
 	P0_PHCON0 = 0x00;
-	P0_PHCON1 = 0xffu; // port 6 pull-up enable
-	P0_P6M0 = 0xff; // port 6 input
+	P0_PHCON1 = 0xff; // port 6 pull-up enable
+
+	P5 = 0x00;
+	P6 = 0xff;
+	P7 = 0xff;
+	P8 = 0x00;
+	P9 = 0x00;
+
+	P0_P5M0 = 0x00;
+	P0_P6M0 = 0xff;
+	P0_P7M0 = 0xff;
+	P0_P8M0 = 0x00;
+
 	PAGESW = 1;
-	P1_PHCON2 = 0x00;
+	P1_PHCON2 = 0x03;
+	P1_P9M0 = 0x0d; // pogo i2c/int remain as inputs
 
 	// enable auto-tuning internal RC oscillator based on USB SOF packets
 	P1_IRCCTRL &= ~BIT(1); // disable manual trim
