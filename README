@@ -13,7 +13,7 @@ Features:
     to do HW modifications to their keyboard to add more peripherals to
     the keyboard MCU.
   - Power efficient implementation using power-down feature of the MCU
-    to save power as much as possible. (currently: 9 mW when idle, 20mW
+    to save power as much as possible. (currently: 250 uW when idle, 16mW
     in active scanning mode - with at least one key pressed)
 - Stock firmware is flashed in factory and allows flashing user firmware
   from the pinephone itself over I2C interface.
