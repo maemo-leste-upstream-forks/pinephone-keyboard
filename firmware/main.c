@@ -2075,6 +2075,12 @@ void main(void)
 				// pin state against the P6 latch for output
 				p6_changed = 0;
 				P6 = P6;
+				// last check that nothing is pressed currently
+				// if it is, we need to abort the sleep
+				if (keyscan_idle_is_pressed()) {
+					p6_changed = 1;
+					continue;
+				}
 				P0_ICEN = BIT(5);
 				ICIE = 1;
 
