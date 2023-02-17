@@ -2142,8 +2142,16 @@ void main(void)
 		// if active scanning is not active and port 6 change was
 		// detected, and some key is still pressed, enter active
 		// scanning mode
-		if (!scan_active && keyscan_idle_is_pressed())
-			keyscan_active();
+		if (!scan_active) {
+			if (keyscan_idle_is_pressed())
+				keyscan_active();
+
+			// when the scan is not active, we may have been woken up
+			// by port 6 change interrupt, so we want to clear the
+			// port 6 change flag here, to allow the controller to
+			// sleep again in case the active scanning is not needed
+			p6_changed = 0;
+		}
 
 		// if we're in active scanning, scan the keys, and report
 		// new state
