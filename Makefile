@@ -5,8 +5,9 @@ CFLAGS ?= -O2 -g0
 CFLAGS += -DVERSION="\"$(VERSION)\"" -I. -I$(OUT) -Wall -Wno-unused-variable -Wno-unused-function
 
 tools: $(OUT)ppkb-i2c-inputd $(OUT)ppkb-usb-flasher $(OUT)ppkb-usb-debugger $(OUT)ppkb-i2c-debugger $(OUT)ppkb-i2c-charger-ctl $(OUT)ppkb-i2c-flasher
+fw: $(OUT)fw-stock.bin
 
-all: tools $(OUT)fw-stock.bin
+all: tools fw
 
 $(OUT)ppkb-usb-flasher: usb-flasher.c common.c
 	@mkdir -p $(OUT)
@@ -45,3 +46,5 @@ $(OUT)fw-stock.bin $(OUT)fw-user.bin: $(wildcard firmware/*.*)
 	cd firmware && ./build.sh
 	cp -f firmware/build/fw-stock.bin $(OUT)fw-stock.bin
 	cp -f firmware/build/fw-user.bin $(OUT)fw-user.bin
+
+.PHONY: all fw tools
