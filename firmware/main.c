@@ -2016,8 +2016,12 @@ void main(void)
 
 	keyscan_idle();
 
+#if CONFIG_USB_STACK
 	__bit usb_initialized = 0;
+#endif
+#if CONFIG_STOCK_FW
 	__bit user_app_checked = 0;
+#endif
 	uint16_t ticks = 0;
 	while (1) {
 		// execute I2C system/flashing commands, once the I2C
