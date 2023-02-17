@@ -26,6 +26,8 @@ sdcc \
 	-I. \
 	-DFW_REVISION_STR="\"$(git describe) $(git log -1 --format=%cd --date=iso)\"" \
 	-DCONFIG_STOCK_FW=1 \
+	-DCONFIG_USB_STACK=0 \
+	-DCONFIG_SELFTEST=0 \
 	build/stock-ivt.rel main.c \
 	-o build/fw-stock.ihx
 
