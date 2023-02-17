@@ -1897,6 +1897,12 @@ static void usb_init(void)
 	P0_EIE2 |= BIT(2);
 }
 
+#else
+
+void usb_interrupt(void) __interrupt(IRQ_USB) __using(1)
+{
+}
+
 #endif
 
 static void usb_disable(void)
