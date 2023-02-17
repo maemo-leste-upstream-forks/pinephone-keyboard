@@ -2038,8 +2038,8 @@ void main(void)
 	// turn off PLL48
 	P1_UDCCTRL |= BIT(0);
 
-	// turn off unused USB resources (phy power down, PLL48 powerdown, regulator off, pins to gpio mode)
-	P1_USBCTRL = BIT(0) | BIT(1) | BIT(2) | BIT(7);
+	// turn off unused USB resources (phy power down, PLL48 powerdown
+	P1_USBCTRL |= BIT(0) | BIT(1);
 
 	// enable auto-tuning internal RC oscillator based on USB SOF packets
 	P1_IRCCTRL |= BIT(1); // enable manual trim
