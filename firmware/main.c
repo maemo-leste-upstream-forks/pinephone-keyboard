@@ -1988,7 +1988,7 @@ void main(void)
 	//   0: P7 0-3 - pull up
 	//   1: P7 4-7 - pull up
 	//   2: P8 0-3 - no pull up, all out low, P80 must not have pull-up
-	//   3: P8 4-7 - no pull up, pmic i2c has its own pull-up
+	//   3: P8 4-7 - pull up, even though pmic i2c level translator has its own pull-ups
 	//   4: P9 0-3 - no pull up, P91 out low, pullups on phone side
 	//   5: P9 4-7 - no pull up, all out low
 
@@ -2006,10 +2006,10 @@ void main(void)
 	P0_P5M0 = 0x00;
 	P0_P6M0 = 0xff;
 	P0_P7M0 = 0xff;
-	P0_P8M0 = 0x00;
+	P0_P8M0 = 0xf0;
 
 	PAGESW = 1;
-	P1_PHCON2 = 0x03;
+	P1_PHCON2 = BIT(3) | BIT(1) | BIT(0);
 	P1_P9M0 = 0x0d; // pogo i2c/int remain as inputs
 
 	// enable auto-tuning internal RC oscillator based on USB SOF packets
