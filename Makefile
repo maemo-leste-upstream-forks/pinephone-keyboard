@@ -1,5 +1,7 @@
 VERSION := $(shell git describe) $(shell git log -1 --format=%cd --date=iso)
 
+PREFIX = /usr
+
 OUT ?= build/
 CFLAGS ?= -O2 -g0
 CFLAGS += -DVERSION="\"$(VERSION)\"" -I. -I$(OUT) -Wall -Wno-unused-variable -Wno-unused-function
@@ -47,4 +49,13 @@ $(OUT)fw-stock.bin $(OUT)fw-user.bin: $(wildcard firmware/*.*)
 	cp -f firmware/build/fw-stock.bin $(OUT)fw-stock.bin
 	cp -f firmware/build/fw-user.bin $(OUT)fw-user.bin
 
-.PHONY: all fw tools
+.PHONY: all fw tools clean install
+
+clean:
+	rm -f $(OUT)ppkb-i2c-inputd $(OUT)ppkb-usb-flasher $(OUT)ppkb-usb-debugger $(OUT)ppkb-i2c-debugger $(OUT)ppkb-i2c-charger-ctl $(OUT)ppkb-i2c-flasher $(OUT)kmap.h
+
+install:
+	mkdir -p $(DESTDIR)$(PREFIX)/bin/
+	mkdir -p $(DESTDIR)$(PREFIX)/share/ppkb-firmware
+	install $(OUT)ppkb-i2c-inputd $(OUT)ppkb-usb-flasher $(OUT)ppkb-usb-debugger $(OUT)ppkb-i2c-debugger $(OUT)ppkb-i2c-charger-ctl $(OUT)ppkb-i2c-flasher $(DESTDIR)$(PREFIX)/bin/
+	install $(OUT)fw-stock.bin $(OUT)fw-user.bin $(DESTDIR)$(PREFIX)/share/ppkb-firmware/
