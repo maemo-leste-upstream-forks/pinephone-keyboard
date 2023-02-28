@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# install the firmware here!
+#
+exit 0

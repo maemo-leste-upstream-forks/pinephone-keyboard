@@ -1,0 +1,14 @@
+Source: pinephone-keyboard
+Priority: optional
+Section: x11
+Maintainer: Rafael Diniz <rafael@riseup.net>
+Build-Depends:
+ debhelper-compat (=12),
+Standards-Version: 4.3.0
+Vcs-Git: https://github.com/maemo-leste-upstream-forks/pinephone-keyboard
+Vcs-Browser: https://github.com/maemo-leste-upstream-forks/pinephone-keyboard
+
+Package: pinephone-keyboard
+Architecture: all
+Depends: ${misc:Depends}
+Description: Pinephone keyboard tools and firmware
