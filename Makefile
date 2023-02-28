@@ -1,4 +1,4 @@
-VERSION := $(shell git describe) $(shell git log -1 --format=%cd --date=iso)
+VERSION := 1.3
 
 PREFIX = /usr
 
