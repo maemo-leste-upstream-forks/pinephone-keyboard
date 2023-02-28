@@ -9,6 +9,6 @@ Vcs-Git: https://github.com/maemo-leste-upstream-forks/pinephone-keyboard
 Vcs-Browser: https://github.com/maemo-leste-upstream-forks/pinephone-keyboard
 
 Package: pinephone-keyboard
-Architecture: all
+Architecture: arm64
 Depends: ${misc:Depends}
 Description: Pinephone keyboard tools and firmware
