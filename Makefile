@@ -1,4 +1,4 @@
-VERSION := $(shell git describe) $(shell git log -1 --format=%cd --date=iso)
+VERSION := 1.3
 
 PREFIX = /usr
 
@@ -6,10 +6,11 @@ OUT ?= build/
 CFLAGS ?= -O2 -g0
 CFLAGS += -DVERSION="\"$(VERSION)\"" -I. -I$(OUT) -Wall -Wno-unused-variable -Wno-unused-function
 
-tools: $(OUT)ppkb-i2c-inputd $(OUT)ppkb-usb-flasher $(OUT)ppkb-usb-debugger $(OUT)ppkb-i2c-debugger $(OUT)ppkb-i2c-charger-ctl $(OUT)ppkb-i2c-flasher
-fw: $(OUT)fw-stock.bin
+all: tools
 
-all: tools fw
+tools: $(OUT)ppkb-i2c-inputd $(OUT)ppkb-usb-flasher $(OUT)ppkb-usb-debugger $(OUT)ppkb-i2c-debugger $(OUT)ppkb-i2c-charger-ctl $(OUT)ppkb-i2c-flasher
+
+fw: $(OUT)fw-stock.bin
 
 $(OUT)ppkb-usb-flasher: usb-flasher.c common.c
 	@mkdir -p $(OUT)
@@ -58,4 +59,4 @@ install:
 	mkdir -p $(DESTDIR)$(PREFIX)/bin/
 	mkdir -p $(DESTDIR)$(PREFIX)/share/ppkb-firmware
 	install $(OUT)ppkb-i2c-inputd $(OUT)ppkb-usb-flasher $(OUT)ppkb-usb-debugger $(OUT)ppkb-i2c-debugger $(OUT)ppkb-i2c-charger-ctl $(OUT)ppkb-i2c-flasher $(DESTDIR)$(PREFIX)/bin/
-	install $(OUT)fw-stock.bin $(OUT)fw-user.bin $(DESTDIR)$(PREFIX)/share/ppkb-firmware/
+	install firmware/build/fw-stock.bin firmware/build/fw-user.bin $(DESTDIR)$(PREFIX)/share/ppkb-firmware/
